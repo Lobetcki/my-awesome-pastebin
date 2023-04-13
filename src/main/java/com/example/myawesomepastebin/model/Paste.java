@@ -16,4 +16,5 @@ public class Paste {
     private Instant dataDeletion;
     private String title;
     private String paste;
+    private Boolean status;
 }
