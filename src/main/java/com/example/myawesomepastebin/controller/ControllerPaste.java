@@ -3,6 +3,7 @@ package com.example.myawesomepastebin.controller;
 import com.example.myawesomepastebin.dto.PasteDTO;
 import com.example.myawesomepastebin.dto.PasteGetDTO;
 import com.example.myawesomepastebin.dto.UrlDTO;
+import com.example.myawesomepastebin.exception.PasteNotFoundException;
 import com.example.myawesomepastebin.model.ExpirationTime;
 import com.example.myawesomepastebin.model.Status;
 import com.example.myawesomepastebin.service.ServicePaste;
@@ -36,12 +37,13 @@ public class ControllerPaste {
     }
 
     @GetMapping("{url}")
-    public ResponseEntity<PasteGetDTO> getPaste(String url){
+    public ResponseEntity<PasteGetDTO> getPaste(String url) throws PasteNotFoundException {
         PasteGetDTO pasteGetDTO = servicePaste.getPaste(url);
-        if (pasteGetDTO == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(pasteGetDTO);
     }
 
+    @GetMapping("text")
+    public ResponseEntity<List<PasteGetDTO>> pastesFoundByText(@RequestParam String text){
+        return ResponseEntity.ok(servicePaste.pastesFoundByText(text));
+    }
 }

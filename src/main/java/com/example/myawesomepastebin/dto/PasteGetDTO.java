@@ -23,7 +23,7 @@ public class PasteGetDTO {
 
         pasteGetDTO.setUrl(paste.getUrl());
         pasteGetDTO.setDataExpired(paste.getDataExpired());
-        pasteGetDTO.setDataCreated(
+        pasteGetDTO.setDataCreated(Instant.now());
         pasteGetDTO.setTitle(paste.getTitle());
         pasteGetDTO.setPaste(paste.getPaste());
 
