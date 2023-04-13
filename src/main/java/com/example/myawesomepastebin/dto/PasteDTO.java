@@ -8,11 +8,11 @@ import lombok.Setter;
 @Setter
 public class PasteDTO {
 
-//    private Instant dataCreated;
+
     private String title;
     private String paste;
 
-    public Paste toPaste(PasteDTO pasteDTO) {
+    public static Paste toPaste(PasteDTO pasteDTO) {
         Paste paste = new Paste();
         paste.setTitle(pasteDTO.getTitle());
         paste.setPaste(pasteDTO.getPaste());

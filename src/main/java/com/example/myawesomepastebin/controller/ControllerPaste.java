@@ -1,12 +1,15 @@
 package com.example.myawesomepastebin.controller;
 
 import com.example.myawesomepastebin.dto.PasteDTO;
+import com.example.myawesomepastebin.dto.PasteGetDTO;
 import com.example.myawesomepastebin.dto.UrlDTO;
 import com.example.myawesomepastebin.model.ExpirationTime;
 import com.example.myawesomepastebin.model.Status;
 import com.example.myawesomepastebin.service.ServicePaste;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/")
@@ -21,6 +24,24 @@ public class ControllerPaste {
     public ResponseEntity<UrlDTO> createPaste(@RequestBody PasteDTO pasteDTO,
                                               @RequestParam("expirationTime") ExpirationTime expirationTime,
                                               @RequestParam("status") Status status){
-        return ResponseEntity.ok(servicePaste.createPaste(pasteDTO));
+        if (pasteDTO == null || pasteDTO.getPaste() == null || pasteDTO.getPaste().isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(servicePaste.createPaste(pasteDTO, expirationTime, status));
     }
+
+    @GetMapping("last_ten")
+    public ResponseEntity<List<PasteGetDTO>> getLastTen(){
+        return ResponseEntity.ok(servicePaste.getLastTen());
+    }
+
+    @GetMapping("{url}")
+    public ResponseEntity<PasteGetDTO> getPaste(String url){
+        PasteGetDTO pasteGetDTO = servicePaste.getPaste(url);
+        if (pasteGetDTO == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(pasteGetDTO);
+    }
+
 }
