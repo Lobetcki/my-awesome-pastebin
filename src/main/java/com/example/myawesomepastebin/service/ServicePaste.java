@@ -61,11 +61,6 @@ public class ServicePaste {
         List<Paste> pastes = repositoryPaste
                 .findAllByTitleContainsIgnoreCaseOrBodyContainsIgnoreCaseAndStatusAndDataExpiredIsAfter(
                         titleText, bodyText, Status.PUBLIC, Instant.now());
-//        List<Paste> pasteList = repositoryPaste.findAll(PasteSpecificashion.byTitle(titleText)
-//                .and(PasteSpecificashion.byBody(bodyText))
-//                .and(PasteSpecificashion.byStatus(Status.PUBLIC))
-//        );
-//        List<Paste> list = repositoryPaste.findAllByTitleOrBodyAndStatus(titleText, bodyText, Status.PUBLIC);
         return pastes.stream().map(PasteGetDTO::from).collect(Collectors.toList());
     }
 }

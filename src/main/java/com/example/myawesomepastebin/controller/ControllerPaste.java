@@ -6,6 +6,7 @@ import com.example.myawesomepastebin.dto.UrlDTO;
 import com.example.myawesomepastebin.exception.PasteNotFoundException;
 import com.example.myawesomepastebin.model.ExpirationTime;
 import com.example.myawesomepastebin.model.Status;
+import com.example.myawesomepastebin.repozitory.RepositoryPaste;
 import com.example.myawesomepastebin.service.ServicePaste;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
