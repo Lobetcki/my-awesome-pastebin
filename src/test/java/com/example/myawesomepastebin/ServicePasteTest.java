@@ -6,7 +6,6 @@ import com.example.myawesomepastebin.model.ExpirationTime;
 import com.example.myawesomepastebin.model.Paste;
 import com.example.myawesomepastebin.model.Status;
 import com.example.myawesomepastebin.repozitory.RepositoryPaste;
-import com.example.myawesomepastebin.repozitory.specificashion.PasteSpecificashion;
 import com.example.myawesomepastebin.service.ServicePaste;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -45,7 +44,7 @@ public class ServicePasteTest {
 
     @Test
     void whenGetLastTen_GetTenPaste(){
-        List list = new ArrayList(10);
+        List<Paste> list = new ArrayList<>(10);
 
         when(repositoryMock.fundLastTen()).thenReturn(list);
         Assertions.assertEquals(list.size(), servicePaste.getLastTen().size());
@@ -60,20 +59,4 @@ public class ServicePasteTest {
         PasteGetDTO pasteDTO = servicePaste.getPaste("/");
         Assertions.assertEquals("/", pasteDTO.getUrl());
     }
-
-//    @Test
-//    void whenPastesFoundByText_GetByText(){
-//        List<Paste> list = new ArrayList<>(1);
-//        pasteTest.setTitle("123");
-//        pasteTest.setBody("789");
-//        pasteTest.setStatus(Status.PUBLIC);
-//
-//        List<PasteGetDTO> pasteList = servicePaste.pastesFoundByText("1", "7");
-//        when(repositoryMock.findAll(PasteSpecificashion.byTitle("1")
-//                .and(PasteSpecificashion.byBody("7"))
-//                .and(PasteSpecificashion.byStatus(Status.PUBLIC)))).thenReturn(list);
-//        Assertions.assertEquals(list.size(), pasteList.size());
-////                servicePaste.pastesFoundByText("1", "7").size());
-//    }
-
 }
