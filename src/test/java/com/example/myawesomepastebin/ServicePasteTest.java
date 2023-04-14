@@ -31,7 +31,6 @@ public class ServicePasteTest {
     private ServicePaste servicePaste;
 
     private final Paste pasteTest = new Paste();
-//    @BeforeEach
 
     @Test
     void whenCreatePaste_AddPaste(){

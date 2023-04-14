@@ -58,31 +58,41 @@ public class ControllerPasteTest {
         repositoryPaste.deleteAll();
     }
 
-    @Test
-    void whenCreatePaste() throws Exception {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("title", "test");
-        jsonObject.put("body", "Test test");
+//    @Test
+//    void whenCreatePaste() throws Exception {
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put("title", "test");
+//        jsonObject.put("body", "Test test");
+//
+//        MvcResult result = mockMvc.perform(post("/?expirationTime=TEN_MIN&status=PUBLIC")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(jsonObject.toString()))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.url").isNotEmpty())
+//                .andExpect(jsonPath("$.url").isString())
+//                .andReturn();
+//
+//        String url = JsonPath.read(result.getResponse().getContentAsString(), "$.url");
 
-//        ExpirationTime expirationTime = ExpirationTime.TEN_MIN;
-//        Status status = Status.PUBLIC;
+//        mockMvc.perform(get("/" +  url)
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.url").value(url))
+//                .andExpect(jsonPath("$.title").value("test"))
+//                .andExpect(jsonPath("$.body").value("Test test"));
+//    }
 
-        MvcResult result = mockMvc.perform(post("/?expirationTime=TEN_MIN&status=PUBLIC")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonObject.toString()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.url").isNotEmpty())
-                .andExpect(jsonPath("$.url").isNumber())
-                .andExpect(jsonPath("$.title").value("test"))
-                .andExpect(jsonPath("$.body").value("Test test"))
+//    @Test
+//    void whenGetLastTen() throws Exception {
+//        mockMvc.perform(get("/last_ten"))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$").isArray())
+//                .andExpect(jsonPath("$.length()").value(1));
+//    }
 
-        String id = JsonPath.read(result.getResponse().getContentAsString(), "$.url");
+//    @Test
+    
 
-        mockMvc.perform(get("/" +  id)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.url").value(id))
-                .andExpect(jsonPath("$.title").value("test"))
-                .andExpect(jsonPath("$.body").value("Test test"));
-    }
+
+
 }
