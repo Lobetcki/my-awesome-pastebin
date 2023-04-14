@@ -19,7 +19,7 @@ public class ClearPastes {
     }
 
     @Transactional
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 86_400_000)
     public void clearPaste() {
         log.info("Clearing pastes");
         repositoryPaste.deleteAllByDataExpiredIsBefore(Instant.now());

@@ -14,8 +14,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -26,6 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@Testcontainers
+@ActiveProfiles("test-containers")
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ControllerPasteTest {
@@ -41,6 +45,18 @@ public class ControllerPasteTest {
 
     Paste paste;
 
+//    @Container
+//    private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:13")
+//            .withUsername("postgres")
+//            .withPassword("test");
+//
+//    @DynamicPropertySource
+//    static void postgresProperties(DynamicPropertyRegistry registry) {
+//        registry.add("spring.datasource.url", postgres::getJdbcUrl);
+//        registry.add("spring.datasource.username", postgres::getUsername);
+//        registry.add("spring.datasource.password", postgres::getPassword);
+//    }
+
     @BeforeEach
     public void setUp() {
         paste = new Paste();
@@ -50,6 +66,7 @@ public class ControllerPasteTest {
         paste.setStatus(Status.PUBLIC);
         paste.setDataExpired(Instant.now().plus(1, ChronoUnit.MINUTES));
         paste.setDataCreated(Instant.now());
+        repositoryPaste.save(paste);
     }
 
     @AfterEach

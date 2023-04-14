@@ -9,7 +9,6 @@ import com.example.myawesomepastebin.model.ExpirationTime;
 import com.example.myawesomepastebin.model.Paste;
 import com.example.myawesomepastebin.model.Status;
 import com.example.myawesomepastebin.repozitory.RepositoryPaste;
-import com.example.myawesomepastebin.repozitory.specificashion.PasteSpecificashion;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -33,7 +32,7 @@ public class ServicePaste {
         }
         Paste paste = PasteDTO.toPaste(pasteDTO);
 
-        paste.setUrl("http://my-awesome-pastebin.tld/" + UUID.randomUUID().toString().substring(0, 7));
+        paste.setUrl("http://my-awesome-pastebin.tld/" + UUID.randomUUID());
         if (expirationTime.equals(ExpirationTime.UNLIMITED)) {
             paste.setDataExpired(null);
         } else {
@@ -48,20 +47,25 @@ public class ServicePaste {
     }
 
     public List<PasteGetDTO> getLastTen() {
-        return repositoryPaste.fundLastTen().stream()
+        return repositoryPaste.findTop10ByAccessAndExpiredDateIsAfterOrderByCreatedDateDesc(Status.PUBLIC, Instant.now()).stream()
                 .map(PasteGetDTO::from).collect(Collectors.toList());
     }
 
     public PasteGetDTO getPaste(String url) {
-        Paste paste = repositoryPaste.findById(url).orElseThrow(PasteNotFoundException::new);
+        Paste paste = repositoryPaste.findByUrlAndDataExpiredIsAfter(url, Instant.now()).orElseThrow(PasteNotFoundException::new);
         return PasteGetDTO.from(paste);
     }
 
     public List<PasteGetDTO> pastesFoundByText(String titleText, String bodyText) {
-        List<Paste> pasteList = repositoryPaste.findAll(PasteSpecificashion.byTitle(titleText)
-                .and(PasteSpecificashion.byBody(bodyText))
-                .and(PasteSpecificashion.byStatus(Status.PUBLIC))
-        );
-        return pasteList.stream().map(PasteGetDTO::from).collect(Collectors.toList());
+
+        List<Paste> pastes = repositoryPaste
+                .findAllByTitleContainsIgnoreCaseOrBodyContainsIgnoreCaseAndStatusAndDataExpiredIsAfter(
+                        titleText, bodyText, Status.PUBLIC, Instant.now());
+//        List<Paste> pasteList = repositoryPaste.findAll(PasteSpecificashion.byTitle(titleText)
+//                .and(PasteSpecificashion.byBody(bodyText))
+//                .and(PasteSpecificashion.byStatus(Status.PUBLIC))
+//        );
+//        List<Paste> list = repositoryPaste.findAllByTitleOrBodyAndStatus(titleText, bodyText, Status.PUBLIC);
+        return pastes.stream().map(PasteGetDTO::from).collect(Collectors.toList());
     }
 }
