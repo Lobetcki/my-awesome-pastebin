@@ -25,7 +25,7 @@ public class ControllerPaste {
     public ResponseEntity<UrlDTO> createPaste(@RequestBody PasteDTO pasteDTO,
                                               @RequestParam("expirationTime") ExpirationTime expirationTime,
                                               @RequestParam("status") Status status){
-        if (pasteDTO == null || pasteDTO.getPaste() == null || pasteDTO.getPaste().isBlank()) {
+        if (pasteDTO == null || pasteDTO.getBody() == null || pasteDTO.getBody().isBlank()) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(servicePaste.createPaste(pasteDTO, expirationTime, status));
@@ -43,7 +43,9 @@ public class ControllerPaste {
     }
 
     @GetMapping("text")
-    public ResponseEntity<List<PasteGetDTO>> pastesFoundByText(@RequestParam String text){
-        return ResponseEntity.ok(servicePaste.pastesFoundByText(text));
+    public ResponseEntity<List<PasteGetDTO>> pastesFoundByText(
+            @RequestParam(required = false) String titleText,
+            @RequestParam(required = false) String bodyText){
+        return ResponseEntity.ok(servicePaste.pastesFoundByText(titleText, bodyText));
     }
 }

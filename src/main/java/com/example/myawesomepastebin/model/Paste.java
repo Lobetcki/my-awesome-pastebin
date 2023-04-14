@@ -18,7 +18,7 @@ public class Paste {
     private Instant dataExpired;
     private Instant dataCreated;
     private String title;
-    private String paste;
+    private String body;
     @Enumerated(EnumType.STRING)
     private Status status;
 }

@@ -1,12 +1,9 @@
 package com.example.myawesomepastebin.dto;
 
 import com.example.myawesomepastebin.model.Paste;
-import com.example.myawesomepastebin.model.Status;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import java.time.Instant;
 @Getter
 @Setter
@@ -16,7 +13,7 @@ public class PasteGetDTO {
     private Instant dataExpired;
     private Instant dataCreated;
     private String title;
-    private String paste;
+    private String body;
 
     public static PasteGetDTO from(Paste paste) {
         PasteGetDTO pasteGetDTO = new PasteGetDTO();
@@ -25,7 +22,7 @@ public class PasteGetDTO {
         pasteGetDTO.setDataExpired(paste.getDataExpired());
         pasteGetDTO.setDataCreated(Instant.now());
         pasteGetDTO.setTitle(paste.getTitle());
-        pasteGetDTO.setPaste(paste.getPaste());
+        pasteGetDTO.setBody(paste.getBody());
 
         return pasteGetDTO;
     }

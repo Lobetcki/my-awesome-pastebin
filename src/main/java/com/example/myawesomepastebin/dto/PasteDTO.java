@@ -10,12 +10,12 @@ public class PasteDTO {
 
 
     private String title;
-    private String paste;
+    private String body;
 
     public static Paste toPaste(PasteDTO pasteDTO) {
         Paste paste = new Paste();
         paste.setTitle(pasteDTO.getTitle());
-        paste.setPaste(pasteDTO.getPaste());
+        paste.setBody(pasteDTO.getBody());
         return paste;
     }
 

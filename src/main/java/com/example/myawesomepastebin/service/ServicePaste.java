@@ -9,6 +9,7 @@ import com.example.myawesomepastebin.model.ExpirationTime;
 import com.example.myawesomepastebin.model.Paste;
 import com.example.myawesomepastebin.model.Status;
 import com.example.myawesomepastebin.repozitory.RepositoryPaste;
+import com.example.myawesomepastebin.repozitory.specificashion.PasteSpecificashion;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -27,7 +28,7 @@ public class ServicePaste {
 
     public UrlDTO createPaste(PasteDTO pasteDTO, ExpirationTime expirationTime, Status status) {
 
-        if (pasteDTO == null || pasteDTO.getPaste() == null || pasteDTO.getPaste().isBlank()) {
+        if (pasteDTO == null || pasteDTO.getBody() == null || pasteDTO.getBody().isBlank()) {
             throw new InvalidParametersExeption("No paste");
         }
         Paste paste = PasteDTO.toPaste(pasteDTO);
@@ -56,11 +57,11 @@ public class ServicePaste {
         return PasteGetDTO.from(paste);
     }
 
-    public List<PasteGetDTO> pastesFoundByText(String text) {
-        if (text.isBlank()) {
-            throw new InvalidParametersExeption("No text");
-        }
-//        List<Paste> pasteList = repositoryPaste;
-        return null;
+    public List<PasteGetDTO> pastesFoundByText(String titleText, String bodyText) {
+        List<Paste> pasteList = repositoryPaste.findAll(PasteSpecificashion.byTitle(titleText)
+                .and(PasteSpecificashion.byBody(bodyText))
+                .and(PasteSpecificashion.byStatus(Status.PUBLIC))
+        );
+        return pasteList.stream().map(PasteGetDTO::from).collect(Collectors.toList());
     }
 }
