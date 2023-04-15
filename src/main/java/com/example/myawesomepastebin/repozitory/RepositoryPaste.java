@@ -17,10 +17,10 @@ public interface RepositoryPaste extends JpaRepository<Paste, String>, JpaSpecif
     @Query(value="delete from Paste p where p.dataExpired < now()")
     void deleteAll(Instant now);
 
-    List<Paste> findTop10ByAccessAndExpiredDateIsAfterOrderByCreatedDateDesc(Status status, Instant now);
+    List<Paste> findTop10ByStatusAndDataExpiredIsAfterOrderByDataCreatedDesc(Status status, Instant now);
 
     Optional<Paste> findByUrlAndDataExpiredIsAfter(String url, Instant now);
 
-    List<Paste> findAllByTitleContainsIgnoreCaseOrBodyContainsIgnoreCaseAndStatusAndDataExpiredIsAfter(
-            String title, String text, Status status, Instant now);
+    List<Paste> findAllByTitleContainsOrBodyContainsAndStatusAndDataExpiredIsAfter(
+            String titleText, String bodyText, Status status, Instant now);
 }
