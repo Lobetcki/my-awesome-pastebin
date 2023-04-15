@@ -23,8 +23,9 @@ public class ServicePaste {
     public ServicePaste(RepositoryPaste repositoryPaste) {
         this.repositoryPaste = repositoryPaste;
     }
+
                     // создание уникального ключа с добавлением даты для полной уникальности
-    private String generatedKey(){
+    public String generatedKey(){
         SecureRandom secureRandom = new SecureRandom();
         String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder sb = new StringBuilder(10);
@@ -32,8 +33,7 @@ public class ServicePaste {
             int index = secureRandom.nextInt(alphabet.length());
             sb.append(alphabet.charAt(index));
         }
-        String key = sb.toString() + Instant.now();
-        return key;
+        return "http://my-awesome-pastebin.tld/" + sb.toString() + Instant.now();
     }
 
     public UrlDTO createPaste(PasteDTO pasteDTO) {
@@ -42,7 +42,7 @@ public class ServicePaste {
             throw new InvalidParametersExeption("No paste");
         }
         Paste paste = PasteDTO.toPaste(pasteDTO);
-        paste.setUrl("http://my-awesome-pastebin.tld/" + generatedKey());
+        paste.setUrl(generatedKey());
         paste.setDataCreated(Instant.now());
         repositoryPaste.save(paste);
         UrlDTO urlDTO = new UrlDTO();
@@ -56,14 +56,16 @@ public class ServicePaste {
     public List<PasteGetDTO> getLastTen() {
         return repositoryPaste
                 .findTop10ByStatusAndDataExpiredIsAfterOrderByDataCreatedDesc(
-                Status.PUBLIC, Instant.now()).stream()
-                .map(PasteGetDTO::from).collect(Collectors.toList());
+                Status.PUBLIC, Instant.now())
+                .stream()
+                .map(PasteGetDTO::from)
+                .collect(Collectors.toList());
     }
 
-    public PasteGetDTO getPaste(String url) {
+    public PasteGetDTO getPasteUrl(String url) {
         Paste paste = repositoryPaste
-                .findByUrlAndDataExpiredIsAfter(
-                        url, Instant.now()).orElseThrow(PasteNotFoundException::new);
+                .findByUrlAndDataExpiredIsAfter(url, Instant.now())
+                .orElseThrow(PasteNotFoundException::new);
         return PasteGetDTO.from(paste);
     }
 

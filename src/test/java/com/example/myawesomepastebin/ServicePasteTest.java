@@ -14,10 +14,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -31,32 +35,37 @@ public class ServicePasteTest {
 
     private final Paste pasteTest = new Paste();
 
-//    @Test
-//    void whenCreatePaste_AddPaste(){
-//        PasteDTO paste = new PasteDTO();
-//        paste.setTitle("Asd");
-//        paste.setBody("Qwwer sdgh ftjrtfj");
-//
-//        when(repositoryMock.save(any(Paste.class))).thenReturn(pasteTest);
-//        servicePaste.createPaste(paste, ExpirationTime.ONE_HOUR, Status.PUBLIC);
-//        verify(repositoryMock, only()).save(any(Paste.class));
-//    }
-//
-//    @Test
-//    void whenGetLastTen_GetTenPaste(){
-//        List<Paste> list = new ArrayList<>(10);
-//
-//        when(repositoryMock.fundLastTen()).thenReturn(list);
-//        Assertions.assertEquals(list.size(), servicePaste.getLastTen().size());
-//    }
-//
-//    @Test
-//    void whenGetPaste_GetPasteByUrl() {
-//        pasteTest.setTitle("Asd");
-//        pasteTest.setUrl("/");
-//        when(repositoryMock.findById("/"))
-//                .thenReturn(Optional.of(pasteTest));
-//        PasteGetDTO pasteDTO = servicePaste.getPaste("/");
-//        Assertions.assertEquals("/", pasteDTO.getUrl());
-//    }
+    @Test
+    void whenCreatePaste_AddPaste(){
+        PasteDTO paste = new PasteDTO();
+        paste.setExpirationTime(ExpirationTime.TEN_MIN);
+        paste.setTitle("Asd");
+        paste.setBody("Qwwer sdgh ftjrtfj");
+        paste.setStatus(Status.PUBLIC);
+
+        when(repositoryMock.save(any(Paste.class))).thenReturn(pasteTest);
+        servicePaste.createPaste(paste);
+        verify(repositoryMock, only()).save(any(Paste.class));
+    }
+
+        @Test
+    void whenGetPaste_GetPasteByUrl() {
+        String url = "/";
+        Paste paste = new Paste();
+        paste.setUrl(url);
+        paste.setTitle("Asd");
+        paste.setBody("asd");
+        paste.setStatus(Status.PUBLIC);
+        paste.setDataCreated(Instant.now().minus(Duration.ofDays(1)));
+        paste.setDataExpired(Instant.now().plus(Duration.ofDays(1)));
+
+        when(repositoryMock.findByUrlAndDataExpiredIsAfter(eq(url), any(Instant.class)))
+                .thenReturn(Optional.of(paste));
+
+        PasteGetDTO pasteGetDTO = servicePaste.getPasteUrl(url);
+
+        assertEquals(url, pasteGetDTO.getUrl());
+        assertEquals(paste.getTitle(), pasteGetDTO.getTitle());
+        assertEquals(paste.getBody(), pasteGetDTO.getBody());
+    }
 }

@@ -36,7 +36,7 @@ public class ControllerPaste {
 
     @GetMapping("{url}")
     public ResponseEntity<PasteGetDTO> getPaste(String url) throws PasteNotFoundException {
-        PasteGetDTO pasteGetDTO = servicePaste.getPaste(url);
+        PasteGetDTO pasteGetDTO = servicePaste.getPasteUrl(url);
         return ResponseEntity.ok(pasteGetDTO);
     }
 
