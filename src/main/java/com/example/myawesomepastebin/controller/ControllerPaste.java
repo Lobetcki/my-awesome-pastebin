@@ -4,9 +4,6 @@ import com.example.myawesomepastebin.dto.PasteDTO;
 import com.example.myawesomepastebin.dto.PasteGetDTO;
 import com.example.myawesomepastebin.dto.UrlDTO;
 import com.example.myawesomepastebin.exception.PasteNotFoundException;
-import com.example.myawesomepastebin.model.ExpirationTime;
-import com.example.myawesomepastebin.model.Status;
-import com.example.myawesomepastebin.repozitory.RepositoryPaste;
 import com.example.myawesomepastebin.service.ServicePaste;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,14 +19,14 @@ public class ControllerPaste {
         this.servicePaste = servicePaste;
     }
 
+    // Это не правильно передавать Enam через JSON. Enam это выпадающий список
     @PostMapping
-    public ResponseEntity<UrlDTO> createPaste(@RequestBody PasteDTO pasteDTO,
-                                              @RequestParam("expirationTime") ExpirationTime expirationTime,
-                                              @RequestParam("status") Status status){
-        if (pasteDTO == null || pasteDTO.getBody() == null || pasteDTO.getBody().isBlank()) {
+    public ResponseEntity<UrlDTO> createPaste(@RequestBody PasteDTO pasteDTO)
+    {
+        if (pasteDTO.getBody() == null || pasteDTO.getBody().isBlank()) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(servicePaste.createPaste(pasteDTO, expirationTime, status));
+        return ResponseEntity.ok(servicePaste.createPaste(pasteDTO));
     }
 
     @GetMapping("last_ten")

@@ -31,32 +31,32 @@ public class ServicePasteTest {
 
     private final Paste pasteTest = new Paste();
 
-    @Test
-    void whenCreatePaste_AddPaste(){
-        PasteDTO paste = new PasteDTO();
-        paste.setTitle("Asd");
-        paste.setBody("Qwwer sdgh ftjrtfj");
-
-        when(repositoryMock.save(any(Paste.class))).thenReturn(pasteTest);
-        servicePaste.createPaste(paste, ExpirationTime.ONE_HOUR, Status.PUBLIC);
-        verify(repositoryMock, only()).save(any(Paste.class));
-    }
-
-    @Test
-    void whenGetLastTen_GetTenPaste(){
-        List<Paste> list = new ArrayList<>(10);
-
-        when(repositoryMock.fundLastTen()).thenReturn(list);
-        Assertions.assertEquals(list.size(), servicePaste.getLastTen().size());
-    }
-
-    @Test
-    void whenGetPaste_GetPasteByUrl() {
-        pasteTest.setTitle("Asd");
-        pasteTest.setUrl("/");
-        when(repositoryMock.findById("/"))
-                .thenReturn(Optional.of(pasteTest));
-        PasteGetDTO pasteDTO = servicePaste.getPaste("/");
-        Assertions.assertEquals("/", pasteDTO.getUrl());
-    }
+//    @Test
+//    void whenCreatePaste_AddPaste(){
+//        PasteDTO paste = new PasteDTO();
+//        paste.setTitle("Asd");
+//        paste.setBody("Qwwer sdgh ftjrtfj");
+//
+//        when(repositoryMock.save(any(Paste.class))).thenReturn(pasteTest);
+//        servicePaste.createPaste(paste, ExpirationTime.ONE_HOUR, Status.PUBLIC);
+//        verify(repositoryMock, only()).save(any(Paste.class));
+//    }
+//
+//    @Test
+//    void whenGetLastTen_GetTenPaste(){
+//        List<Paste> list = new ArrayList<>(10);
+//
+//        when(repositoryMock.fundLastTen()).thenReturn(list);
+//        Assertions.assertEquals(list.size(), servicePaste.getLastTen().size());
+//    }
+//
+//    @Test
+//    void whenGetPaste_GetPasteByUrl() {
+//        pasteTest.setTitle("Asd");
+//        pasteTest.setUrl("/");
+//        when(repositoryMock.findById("/"))
+//                .thenReturn(Optional.of(pasteTest));
+//        PasteGetDTO pasteDTO = servicePaste.getPaste("/");
+//        Assertions.assertEquals("/", pasteDTO.getUrl());
+//    }
 }

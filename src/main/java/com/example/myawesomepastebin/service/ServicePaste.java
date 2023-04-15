@@ -5,7 +5,6 @@ import com.example.myawesomepastebin.dto.PasteGetDTO;
 import com.example.myawesomepastebin.dto.UrlDTO;
 import com.example.myawesomepastebin.exception.InvalidParametersExeption;
 import com.example.myawesomepastebin.exception.PasteNotFoundException;
-import com.example.myawesomepastebin.model.ExpirationTime;
 import com.example.myawesomepastebin.model.Paste;
 import com.example.myawesomepastebin.model.Status;
 import com.example.myawesomepastebin.repozitory.RepositoryPaste;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,7 +23,7 @@ public class ServicePaste {
     public ServicePaste(RepositoryPaste repositoryPaste) {
         this.repositoryPaste = repositoryPaste;
     }
-
+                    // создание уникального ключа с добавлением даты для полной уникальности
     private String generatedKey(){
         SecureRandom secureRandom = new SecureRandom();
         String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -38,34 +36,34 @@ public class ServicePaste {
         return key;
     }
 
-    public UrlDTO createPaste(PasteDTO pasteDTO, ExpirationTime expirationTime, Status status) {
-
-        if (pasteDTO == null || pasteDTO.getBody() == null || pasteDTO.getBody().isBlank()) {
+    public UrlDTO createPaste(PasteDTO pasteDTO) {
+        try {
+        if (pasteDTO.getBody().isBlank()) {
             throw new InvalidParametersExeption("No paste");
         }
         Paste paste = PasteDTO.toPaste(pasteDTO);
-
         paste.setUrl("http://my-awesome-pastebin.tld/" + generatedKey());
-        if (expirationTime.equals(ExpirationTime.UNLIMITED)) {
-            paste.setDataExpired(null);
-        } else {
-            paste.setDataExpired(Instant.now().plus(expirationTime.getTime(), expirationTime.getChronoUnit()));
-        }
         paste.setDataCreated(Instant.now());
-        paste.setStatus(status);
         repositoryPaste.save(paste);
         UrlDTO urlDTO = new UrlDTO();
         urlDTO.setUrl(paste.getUrl());
         return urlDTO;
+        } catch (InvalidParametersExeption e){
+            throw  new InvalidParametersExeption("Неверно введены данные");
+        }
     }
 
     public List<PasteGetDTO> getLastTen() {
-        return repositoryPaste.findTop10ByStatusAndDataExpiredIsAfterOrderByDataCreatedDesc(Status.PUBLIC, Instant.now()).stream()
+        return repositoryPaste
+                .findTop10ByStatusAndDataExpiredIsAfterOrderByDataCreatedDesc(
+                Status.PUBLIC, Instant.now()).stream()
                 .map(PasteGetDTO::from).collect(Collectors.toList());
     }
 
     public PasteGetDTO getPaste(String url) {
-        Paste paste = repositoryPaste.findByUrlAndDataExpiredIsAfter(url, Instant.now()).orElseThrow(PasteNotFoundException::new);
+        Paste paste = repositoryPaste
+                .findByUrlAndDataExpiredIsAfter(
+                        url, Instant.now()).orElseThrow(PasteNotFoundException::new);
         return PasteGetDTO.from(paste);
     }
 
