@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
@@ -19,7 +20,7 @@ public class ClearPastes {
     }
 
     @Transactional
-    @Scheduled(fixedDelay = 86_400_000)
+    @Scheduled(fixedRate = 1, timeUnit = TimeUnit.DAYS)
     public void clearPaste() {
         log.info("Clearing pastes");
         repositoryPaste.deleteAll(Instant.now());

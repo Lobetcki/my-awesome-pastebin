@@ -33,7 +33,7 @@ public class ServicePaste {
             int index = secureRandom.nextInt(alphabet.length());
             sb.append(alphabet.charAt(index));
         }
-        return "http://my-awesome-pastebin.tld/" + sb.toString() + Instant.now();
+        return "http://my-awesome-pastebin.tld/" + sb + Instant.now();
     }
 
     public UrlDTO createPaste(PasteDTO pasteDTO) {
