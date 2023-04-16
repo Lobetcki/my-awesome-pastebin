@@ -1,6 +1,5 @@
 package com.example.myawesomepastebin.controller;
 
-import com.example.myawesomepastebin.dto.PasteGetDTO;
 import com.example.myawesomepastebin.model.Paste;
 import com.example.myawesomepastebin.model.Status;
 import com.example.myawesomepastebin.repozitory.RepositoryPaste;
@@ -71,8 +70,6 @@ public class ControllerPasteTest {
         jsonObject.put("title", "test");
         jsonObject.put("body", "Test test");
         jsonObject.put("status", "PUBLIC");
-
-
 
         MvcResult result = mockMvc.perform(post("/")
                         .contentType(MediaType.APPLICATION_JSON)
