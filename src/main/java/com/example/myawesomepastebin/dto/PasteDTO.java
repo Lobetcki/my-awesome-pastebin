@@ -22,14 +22,9 @@ public class PasteDTO {
 
     public static Paste toPaste(PasteDTO pasteDTO) {
         Paste paste = new Paste();
-        if (pasteDTO.getExpirationTime().getTime() == null ||
-                pasteDTO.getExpirationTime().getChronoUnit() == null){
-            paste.setDataExpired(null);
-        } else {
         paste.setDataExpired(Instant.now()
                 .plus(pasteDTO.expirationTime.getTime(),
                         pasteDTO.expirationTime.getChronoUnit()));
-        }
         paste.setTitle(pasteDTO.getTitle());
         paste.setBody(pasteDTO.getBody());
         paste.setStatus(pasteDTO.status);

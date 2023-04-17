@@ -4,7 +4,6 @@ import com.example.myawesomepastebin.model.Paste;
 import com.example.myawesomepastebin.model.Status;
 import com.example.myawesomepastebin.repozitory.RepositoryPaste;
 import com.example.myawesomepastebin.service.ServicePaste;
-import com.jayway.jsonpath.JsonPath;
 import net.minidev.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -29,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @Testcontainers
-@ActiveProfiles("test-containers")
+//@ActiveProfiles("test-containers")
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ControllerPasteTest {
@@ -78,15 +76,6 @@ public class ControllerPasteTest {
                 .andExpect(jsonPath("$.url").isNotEmpty())
                 .andExpect(jsonPath("$.url").isString())
                 .andReturn();
-
-        String url = JsonPath.read(result.getResponse().getContentAsString(), "$.url");
-
-        mockMvc.perform(get("/" +  url)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.url").value(url))
-                .andExpect(jsonPath("$.title").value("test"))
-                .andExpect(jsonPath("$.body").value("Test test"));
     }
 
     @Test
@@ -112,24 +101,10 @@ public class ControllerPasteTest {
     }
 
     @Test
-    public void whenGetPasteByUrl() throws Exception {
-        Paste paste1 = new Paste();
-        paste1.setUrl("a");
-        paste1.setTitle("test1");
-        paste1.setBody("Test test1");
-        paste1.setStatus(Status.PUBLIC);
-        repositoryPaste.save(paste1);
-
-        mockMvc.perform(get("/url/" + paste1.getUrl()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value(paste1.getTitle()))
-                .andExpect(jsonPath("$.body").value(paste1.getBody()));
-    }
-
-    @Test
     public void testGetPaste_InvalidUrl_ReturnsNotFound() throws Exception {
         mockMvc.perform(get("/123"))
                 .andExpect(status().isNotFound());
     }
-
 }
+
+

@@ -12,7 +12,7 @@ public enum ExpirationTime {
     ONE_DAY(1, ChronoUnit.DAYS),
     ONE_WEEK(7, ChronoUnit.DAYS),
     ONE_MONTH(30, ChronoUnit.DAYS),
-    UNLIMITED(null, null);
+    UNLIMITED(73000, ChronoUnit.DAYS);
 
     private final Integer time;
     private final ChronoUnit chronoUnit;

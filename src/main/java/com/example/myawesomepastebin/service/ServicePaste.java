@@ -24,7 +24,7 @@ public class ServicePaste {
         this.repositoryPaste = repositoryPaste;
     }
 
-                    // создание уникального ключа с добавлением даты для полной уникальности
+                    // создание уникального ключа
     public String generatedKey(){
         SecureRandom secureRandom = new SecureRandom();
         String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -33,7 +33,7 @@ public class ServicePaste {
             int index = secureRandom.nextInt(alphabet.length());
             sb.append(alphabet.charAt(index));
         }
-        return "http://my-awesome-pastebin.tld/" + sb + Instant.now();
+        return "http://my-awesome-pastebin.tld/" + sb;
     }
 
     public UrlDTO createPaste(PasteDTO pasteDTO) {
