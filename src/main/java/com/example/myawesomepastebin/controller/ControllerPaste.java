@@ -19,7 +19,7 @@ public class ControllerPaste {
         this.servicePaste = servicePaste;
     }
 
-    // Создание Paste
+    // Сreate Paste
     @PostMapping
     public ResponseEntity<UrlDTO> createPaste(@RequestBody PasteDTO pasteDTO)
     {
