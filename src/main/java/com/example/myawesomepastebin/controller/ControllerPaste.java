@@ -19,7 +19,7 @@ public class ControllerPaste {
         this.servicePaste = servicePaste;
     }
 
-    // Это не правильно передавать Enam через JSON. Enam это выпадающий список
+    // Создание Paste
     @PostMapping
     public ResponseEntity<UrlDTO> createPaste(@RequestBody PasteDTO pasteDTO)
     {
@@ -29,17 +29,20 @@ public class ControllerPaste {
         return ResponseEntity.ok(servicePaste.createPaste(pasteDTO));
     }
 
+    // Last 10 pastes
     @GetMapping("last_ten")
     public ResponseEntity<List<PasteGetDTO>> getLastTen(){
         return ResponseEntity.ok(servicePaste.getLastTen());
     }
 
+    // Get paste
     @GetMapping("url/{url}")
     public ResponseEntity<PasteGetDTO> getPaste(String url) throws PasteNotFoundException {
         PasteGetDTO pasteGetDTO = servicePaste.getPasteUrl(url);
         return ResponseEntity.ok(pasteGetDTO);
     }
 
+    // search
     @GetMapping("text")
     public ResponseEntity<List<PasteGetDTO>> pastesFoundByText(
             @RequestParam(required = false) String titleText,
